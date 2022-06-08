@@ -3,8 +3,10 @@ require 'rails_helper'
 RSpec.describe 'Categories', type: :request do
   # Initialize test data
   let!(:categories) { create_list(:category, 5) }
-  let!(:category_id) { categories.first.id }
+  let(:category_id) { categories.first.id }
   let(:end_point) { '/api/v1/categories' }
+  let(:end_point_with_valid_id) { end_point.concat("/#{category_id}") }
+  let(:end_point_with_invalid_id) { end_point.concat('/invalid_category_id') }
 
   # Test suite for GET /categories
   describe 'GET /categories' do
@@ -24,7 +26,7 @@ RSpec.describe 'Categories', type: :request do
   # Test suite for GET /categories/:id
   describe 'GET /categories/:id' do
     context 'when the category is found' do
-      before { get end_point.concat("/#{category_id}") }
+      before { get end_point_with_valid_id }
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
@@ -35,7 +37,7 @@ RSpec.describe 'Categories', type: :request do
     end
 
     context 'when the category is not found' do
-      before { get end_point.concat("/WRONG_ID") }
+      before { get end_point_with_invalid_id }
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
       end
@@ -63,7 +65,8 @@ RSpec.describe 'Categories', type: :request do
       end
 
       it 'returns a validation failure message' do
-        expect(response.body).to include('is too short')
+        expect(json['error']).to include('Validation failed')
+        expect(json['error']).to include('is too short')
       end
     end
   end
@@ -73,14 +76,19 @@ RSpec.describe 'Categories', type: :request do
   # Test suite for DELETE /categories/:id
   describe 'DELETE /categories/:id' do
     context 'when the category is found' do
-      before { delete end_point.concat("/#{category_id}") }
+      before { delete end_point_with_valid_id }
+
       it 'returns status code 204' do
         expect(response).to have_http_status(204)
+      end
+
+      it 'deletes the category' do
+        expect(Category.where(id: category_id)).to be_empty
       end
     end
 
     context 'when the category is not found' do
-      before { delete end_point.concat("/WRONG_ID") }
+      before { delete end_point_with_invalid_id }
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
       end
