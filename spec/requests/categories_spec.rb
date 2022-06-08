@@ -30,7 +30,7 @@ RSpec.describe 'Categories', type: :request do
       end
 
       it 'returns the right category' do
-        expect(json['category']['id']).to eq(category_id)
+        expect(json['id']).to eq(category_id)
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe 'Categories', type: :request do
       let(:valid_name) { { name: 'Horror' } }
       before { post end_point, params: valid_name }
       it 'creates a category' do
-        expect(json['category']['name']).to eq('Horror')
+        expect(json['name']).to eq('Horror')
       end
 
       it 'returns status code 201' do
