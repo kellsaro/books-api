@@ -50,7 +50,8 @@ RSpec.describe "Books", type: :request do
   # Test suite for POST /books
   describe 'POST /books' do
     context 'when the request is valid' do
-      let(:valid_params) { { title: 'Iliada', author: 'Homero', category_id: Category.first.id } }
+      let!(:a_category) { create(:category) }
+      let(:valid_params) { { title: 'Iliada', author: 'Homero', category_id: a_category.id } }
       before { post end_point, params: valid_params }
 
       it 'returns status code 201' do
