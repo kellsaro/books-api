@@ -72,9 +72,18 @@ RSpec.describe 'Categories', type: :request do
 
   # Test suite for DELETE /categories/:id
   describe 'DELETE /categories/:id' do
-    before { delete end_point.concat("/#{category_id}") }
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    context 'when the category is found' do
+      before { delete end_point.concat("/#{category_id}") }
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the category is not found' do
+      before { delete end_point.concat("/WRONG_ID") }
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
     end
   end
 end

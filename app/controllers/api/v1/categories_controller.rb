@@ -20,7 +20,7 @@ module Api
 
       # DELETE /categories/:id
       def destroy
-        @category.destroy
+        @category.destroy!
         head :no_content
       end
 
