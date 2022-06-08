@@ -22,6 +22,25 @@ RSpec.describe 'Categories', type: :request do
   end
 
   # Test suite for GET /categories/:id
+  describe 'GET /categories/:id' do
+    context 'when the category is found' do
+      before { get end_point.concat("/#{category_id}") }
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns the right category' do
+        expect(json['category']['id']).to eq(category_id)
+      end
+    end
+
+    context 'when the category is not found' do
+      before { get end_point.concat("/WRONG_ID") }
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 
   # Test suite for POST /categories
   describe 'POST /categories' do
@@ -29,7 +48,7 @@ RSpec.describe 'Categories', type: :request do
       let(:valid_name) { { name: 'Horror' } }
       before { post end_point, params: valid_name }
       it 'creates a category' do
-        expect(json['name']).to eq('Horror')
+        expect(json['category']['name']).to eq('Horror')
       end
 
       it 'returns status code 201' do
@@ -54,7 +73,7 @@ RSpec.describe 'Categories', type: :request do
   # Test suite for DELETE /categories/:id
   describe 'DELETE /categories/:id' do
     before { delete end_point.concat("/#{category_id}") }
-    it 'return status code 204' do
+    it 'returns status code 204' do
       expect(response).to have_http_status(204)
     end
   end

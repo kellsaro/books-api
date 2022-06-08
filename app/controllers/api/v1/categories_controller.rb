@@ -1,22 +1,21 @@
 module Api
   module V1
     class CategoriesController < ApplicationController
-      before_action :set_category, only: :destroy
+      before_action :set_category, only: [:show, :destroy]
 
       # GET /categories
       def index
         @categories = Category.all
-        render json: CategoriesRepresenter.new(@categories).as_json
       end
+
+      # GET /categories/:id
+      def show; end
 
       # POST /categories
       def create
         @category = Category.create(category_params)
-        if @category.save
-          render json: CategoryRepresenter.new(@category).as_json, status: :created
-        else
-          render json: @category.errors, status: :unprocessable_entity  
-        end
+        @category.save!
+        render status: :created
       end
 
       # DELETE /categories/:id

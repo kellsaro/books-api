@@ -1,6 +1,10 @@
 module ExceptionHandler
   extend ActiveSupport::Concern
 
+  def json_response(object, status = :ok)
+    render json: object, status: status
+  end
+
   included do
     rescue_from ActiveRecord::RecordNotFound do |e|
       json_response({ error: e.message }, :not_found)

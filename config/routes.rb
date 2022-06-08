@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api do
     namespace :v1 do
-      resources :categories, only: %i[index create destroy]
+      defaults format: :json do
+        resources :categories, only: %i[index show create destroy]
+      end
     end
   end
 end
