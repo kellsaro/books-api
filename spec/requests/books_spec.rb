@@ -2,12 +2,13 @@ require 'rails_helper'
 
 RSpec.describe "Books", type: :request do
   # Initialize test data
-  let!(:books) { create_list(:book, 5) }
+  let(:user) { create(:user) }
+  let!(:books) { create_list(:book, 5, user: user) }
   let(:book_id) { books.first.id }
   let(:end_point) { '/api/v1/books' }
   let(:end_point_with_valid_id) { end_point.concat("/#{book_id}") }
   let(:end_point_with_invalid_id) { end_point.concat("/invalid_book_id") }
-  
+
   # Test suite for GET /books
   describe 'GET /books' do
     # Make HTTP request before each example
@@ -16,7 +17,7 @@ RSpec.describe "Books", type: :request do
     it 'returns books' do
       expect(json).not_to be_empty
       expect(json.length).to eq(5)
-    end 
+    end
 
     it 'returns status code 200(:ok)' do
       expect(response).to have_http_status(:ok)
