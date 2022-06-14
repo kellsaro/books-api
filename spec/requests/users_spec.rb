@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
   describe "POST /register" do
-    it 'authenticates the user' do
+    it 'creates the user' do
       post '/api/v1/users/register', params: { user: { username: 'user1', password: 'password_12345' } }
 
       expect(response).to have_http_status(:created)
