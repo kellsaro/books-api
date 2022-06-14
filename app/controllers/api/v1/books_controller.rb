@@ -1,7 +1,8 @@
 module Api
   module V1
     class BooksController < ApplicationController
-      before_action :set_book, only: %i[show destroy]
+      before_action :authenticate_request!
+      before_action :set_book, only: %i[show update destroy]
 
       # GET /books
       def index
@@ -10,12 +11,21 @@ module Api
 
       # GET /books/:id
       def show; end
-      
+
       # POST /books
       def create
-        @book = Book.new(book_params)
+        @book = current_user!.books.create(book_params)
         @book.save!
         render status: :created
+      end
+
+      # PUT /books
+      def update
+        status = :ok
+        status = :no_content if book_params.empty?
+        @book.update!(book_params) unless book_params.empty?
+
+        render status: status
       end
 
       # DELETE /books/:id
@@ -31,7 +41,7 @@ module Api
       end
 
       def book_params
-        params.permit(:title, :author, :category_id, :user_id)
+        params.permit(:title, :author, :category_id)
       end
     end
   end
