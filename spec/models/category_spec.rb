@@ -10,9 +10,12 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  # Association test
-  it { should have_many(:books) }
-  # Validation test
-  it { should validate_presence_of(:name) }
-  it { should validate_length_of(:name).is_at_least(3) }
+  describe 'Associations' do
+    it { should have_many(:books) }
+  end
+  
+  describe 'Validations' do
+    it { should validate_presence_of(:name) }
+    it { should validate_length_of(:name).is_at_least(3) }
+  end
 end

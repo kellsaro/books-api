@@ -18,8 +18,8 @@ RSpec.describe "Books", type: :request do
       expect(json.length).to eq(5)
     end 
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    it 'returns status code 200(:ok)' do
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -33,16 +33,16 @@ RSpec.describe "Books", type: :request do
         expect(json['category']).not_to be_empty
       end
 
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
+      it 'returns status code 200(:ok)' do
+        expect(response).to have_http_status(:ok)
       end
     end
 
     context 'when the book is not found' do
       before { get end_point_with_invalid_id }
 
-      it 'returns status code 404' do
-        expect(response).to have_http_status(404)
+      it 'returns status code 404(:not_found)' do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -51,11 +51,12 @@ RSpec.describe "Books", type: :request do
   describe 'POST /books' do
     context 'when the request is valid' do
       let!(:a_category) { create(:category) }
-      let(:valid_params) { { title: 'Iliada', author: 'Homero', category_id: a_category.id } }
+      let!(:a_user) { create(:user, username: 'username100') }
+      let(:valid_params) { { title: 'Iliada', author: 'Homero', category_id: a_category.id, user_id: a_user.id } }
       before { post end_point, params: valid_params }
 
-      it 'returns status code 201' do
-        expect(response).to have_http_status(201)
+      it 'returns status code 201(:created)' do
+        expect(response).to have_http_status(:created)
       end
 
       it 'creates the book' do
@@ -70,8 +71,8 @@ RSpec.describe "Books", type: :request do
       let(:invalid_params) { { title: '', author: '' } }
       before { post end_point, params: invalid_params }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 422(:unprocessable_entity)' do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns a validation failed message' do
@@ -92,16 +93,16 @@ RSpec.describe "Books", type: :request do
         expect(Book.where(id: book_id)).to be_empty
       end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 204(:no_content)' do
+        expect(response).to have_http_status(:no_content)
       end
     end
 
     context 'when the book is not found' do
       before { delete end_point_with_invalid_id }
 
-      it 'returns status code 404' do
-        expect(response).to have_http_status(404)
+      it 'returns status code 404(:not_found)' do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

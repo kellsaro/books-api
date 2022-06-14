@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       defaults format: :json do
         resources :categories, only: %i[index show create destroy]
         resources :books, only: %i[index show create destroy]
+        post 'authentications/login', to: 'authentications#create'
+        post 'users/register', to: 'users#create'
       end
     end
   end

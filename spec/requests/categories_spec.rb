@@ -18,8 +18,8 @@ RSpec.describe 'Categories', type: :request do
       expect(json.length).to eq(5)
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    it 'returns status code 200(:ok)' do
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -27,8 +27,8 @@ RSpec.describe 'Categories', type: :request do
   describe 'GET /categories/:id' do
     context 'when the category is found' do
       before { get end_point_with_valid_id }
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
+      it 'returns status code 200(:ok)' do
+        expect(response).to have_http_status(:ok)
       end
 
       it 'returns the right category' do
@@ -38,8 +38,8 @@ RSpec.describe 'Categories', type: :request do
 
     context 'when the category is not found' do
       before { get end_point_with_invalid_id }
-      it 'returns status code 404' do
-        expect(response).to have_http_status(404)
+      it 'returns status code 404(:not_found)' do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -53,15 +53,15 @@ RSpec.describe 'Categories', type: :request do
         expect(json['name']).to eq('Horror')
       end
 
-      it 'returns status code 201' do
-        expect(response).to have_http_status(201)
+      it 'returns status code 201(:created)' do
+        expect(response).to have_http_status(:created)
       end
     end
 
     context 'when the request is invalid' do
       before { post end_point, params: { name: '' } }
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 422(:unprocessable_entity)' do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns a validation failure message' do
@@ -78,8 +78,8 @@ RSpec.describe 'Categories', type: :request do
     context 'when the category is found' do
       before { delete end_point_with_valid_id }
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 204(:no_content)' do
+        expect(response).to have_http_status(:no_content)
       end
 
       it 'deletes the category' do
@@ -89,8 +89,8 @@ RSpec.describe 'Categories', type: :request do
 
     context 'when the category is not found' do
       before { delete end_point_with_invalid_id }
-      it 'returns status code 404' do
-        expect(response).to have_http_status(404)
+      it 'returns status code 404(:not_found)' do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
