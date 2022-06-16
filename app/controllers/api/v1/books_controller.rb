@@ -10,7 +10,8 @@ module Api
       end
 
       # GET /books/:id
-      def show; end
+      def show
+      end
 
       # POST /books
       def create

@@ -9,7 +9,8 @@ module Api
       end
 
       # GET /categories/:id
-      def show; end
+      def show
+      end
 
       # POST /categories
       def create

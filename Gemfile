@@ -25,7 +25,7 @@ gem "jbuilder"
 gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -38,23 +38,25 @@ gem "rack-cors"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
-  gem 'rspec-rails'
+  gem "debug", platforms: %i[mri mingw x64_mingw]
+  gem "rspec-rails"
+  gem "standard"
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-  gem 'annotate'
-  gem 'solargraph'
+  gem "annotate"
+  gem "solargraph"
 end
 
 group :test do
-  gem 'database_cleaner'
-  gem 'factory_bot_rails', '~> 6.1'
-  gem 'faker'
-  gem 'shoulda-matchers', '~> 4.5', '>= 4.5.1'
+  gem "database_cleaner"
+  gem "factory_bot_rails", "~> 6.1"
+  gem "faker"
+  gem "shoulda-matchers", "~> 4.5", ">= 4.5.1"
+  gem "rspec-openapi"
 end
 
 # Ruby implementation of RFC 7519 OAtuh JSON Web Token standard
-gem 'jwt'
+gem "jwt"

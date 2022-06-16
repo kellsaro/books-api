@@ -1,1 +1,1 @@
-json.partial! 'book', collection: @books, as: :book
+json.partial! "book", collection: @books, as: :book

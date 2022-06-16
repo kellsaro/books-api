@@ -1,0 +1,534 @@
+---
+openapi: 3.0.3
+info:
+  title: books-api
+  version: 1.0.0
+servers: []
+paths:
+  "/api/v1/authentications/login":
+    post:
+      summary: create
+      tags:
+      - Api::V1::Authentication
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+            example:
+              username: user1
+              password: p2
+      responses:
+        '201':
+          description: authenticates the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+                  token:
+                    type: string
+              example:
+                id: 1
+                username: user1
+                token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NTU0MzkyMDR9.8ncDyj3i7Sb41zv82XEUEWdg5lT3mVsPWKVcxhrIvRs
+        '401':
+          description: returns error when password is incorrect
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Wrong credentials
+  "/api/v1/books":
+    get:
+      summary: index
+      tags:
+      - Api::V1::Book
+      responses:
+        '401':
+          description: returns authentication error 401(:unauthorized)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: You will need to login first
+        '200':
+          description: returns status code 200(:ok)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    author:
+                      type: string
+                    title:
+                      type: string
+                    category:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+              example:
+              - id: 1
+                author: Sherryl Senger
+                title: As I Lay Dying
+                category:
+                  id: 1
+                  name: Fairy tale
+              - id: 2
+                author: Perla Oberbrunner
+                title: Moab Is My Washpot
+                category:
+                  id: 2
+                  name: Suspense/Thriller
+              - id: 3
+                author: Ms. Robby Predovic
+                title: Gone with the Wind
+                category:
+                  id: 3
+                  name: Short story
+              - id: 4
+                author: Domenic Buckridge
+                title: No Country for Old Men
+                category:
+                  id: 4
+                  name: Mythology
+              - id: 5
+                author: Lucilla Schumm
+                title: A Swiftly Tilting Planet
+                category:
+                  id: 5
+                  name: Mythopoeia
+    post:
+      summary: create
+      tags:
+      - Api::V1::Book
+      responses:
+        '401':
+          description: returns authentication error 401(:unauthorized)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: You will need to login first
+        '201':
+          description: creates the book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  author:
+                    type: string
+                  title:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+              example:
+                id: 6
+                author: Homero
+                title: Iliada
+                category:
+                  id: 6
+                  name: Realistic fiction
+        '422':
+          description: returns a validation failed message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: 'Validation failed: Category must exist, Title can''t be blank,
+                  Author can''t be blank, Title is too short (minimum is 3 characters),
+                  Author is too short (minimum is 3 characters)'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+                category_id:
+                  type: string
+            example:
+              title: ''
+              author: ''
+              category_id: '6'
+  "/api/v1/books/{id}":
+    get:
+      summary: show
+      tags:
+      - Api::V1::Book
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '401':
+          description: returns authentication error 401(:unauthorized)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: You will need to login first
+        '200':
+          description: returns status code 200(:ok)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  author:
+                    type: string
+                  title:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+              example:
+                id: 1
+                author: Rev. Margit Kuhic
+                title: The Heart Is Deceitful Above All Things
+                category:
+                  id: 1
+                  name: Narrative nonfiction
+        '404':
+          description: returns status code 404(:not_found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Couldn't find Book with 'id'=invalid_book_id
+    put:
+      summary: update
+      tags:
+      - Api::V1::Book
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+            example:
+              title: New title
+      responses:
+        '200':
+          description: returns the updated book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  author:
+                    type: string
+                  title:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+              example:
+                id: 1
+                author: Wesley Herzog
+                title: New title
+                category:
+                  id: 1
+                  name: Fantasy
+        '204':
+          description: returns status code 204(:no_content)
+          content:
+            '':
+              schema:
+                type: string
+              example: ''
+    delete:
+      summary: destroy
+      tags:
+      - Api::V1::Book
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '401':
+          description: returns authentication error 401(:unauthorized)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: You will need to login first
+        '204':
+          description: returns status code 204(:no_content)
+          content:
+            '':
+              schema:
+                type: string
+              example: ''
+        '404':
+          description: returns status code 404(:not_found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Couldn't find Book with 'id'=invalid_book_id
+  "/api/v1/categories":
+    get:
+      summary: index
+      tags:
+      - Api::V1::Category
+      responses:
+        '200':
+          description: returns status code 200(:ok)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+              example:
+              - id: 1
+                name: Fiction in verse
+              - id: 2
+                name: Science fiction
+              - id: 3
+                name: Biography/Autobiography
+              - id: 4
+                name: Fanfiction
+              - id: 5
+                name: Classic
+    post:
+      summary: create
+      tags:
+      - Api::V1::Category
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            example:
+              name: ''
+      responses:
+        '201':
+          description: returns status code 201(:created)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+              example:
+                id: 6
+                name: Horror
+        '422':
+          description: returns a validation failure message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: 'Validation failed: Name can''t be blank, Name is too short
+                  (minimum is 3 characters)'
+  "/api/v1/categories/{id}":
+    get:
+      summary: show
+      tags:
+      - Api::V1::Category
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '200':
+          description: returns the right category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+              example:
+                id: 1
+                name: Textbook
+        '404':
+          description: returns status code 404(:not_found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Couldn't find Category with 'id'=invalid_category_id
+    delete:
+      summary: destroy
+      tags:
+      - Api::V1::Category
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+      responses:
+        '204':
+          description: deletes the category
+          content:
+            '':
+              schema:
+                type: string
+              example: ''
+        '404':
+          description: returns status code 404(:not_found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Couldn't find Category with 'id'=invalid_category_id
+  "/api/v1/users/register":
+    post:
+      summary: create
+      tags:
+      - Api::V1::User
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    password:
+                      type: string
+            example:
+              user:
+                username: user1
+                password: password_12345
+      responses:
+        '201':
+          description: creates the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+                  token:
+                    type: string
+              example:
+                id: 1
+                username: user1
+                token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2NTU0MzkyMDR9.8ncDyj3i7Sb41zv82XEUEWdg5lT3mVsPWKVcxhrIvRs

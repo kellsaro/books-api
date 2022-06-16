@@ -11,7 +11,7 @@ module Api
           raise AuthenticationError unless user.authenticate(params.require(:password))
           render status: :created
         else
-          render json: { error: 'Wrong credentials' }, status: :unauthorized
+          render json: {error: "Wrong credentials"}, status: :unauthorized
         end
       end
 
@@ -22,11 +22,11 @@ module Api
       end
 
       def parameter_missing(error)
-        render json: { error: error.message }, status: :unprocessable_entity
+        render json: {error: error.message}, status: :unprocessable_entity
       end
 
       def handle_unauthenticated
-        render json: { error: 'Wrong credentials' }, status: :unauthorized
+        render json: {error: "Wrong credentials"}, status: :unauthorized
       end
     end
   end
