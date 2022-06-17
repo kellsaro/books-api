@@ -1,5 +1,6 @@
-PATH
-  remote: /Users/maykell/Projects/ruby/rails/rails_util
+GIT
+  remote: https://github.com/kellsaro/rails_util.git
+  revision: a9fa89073a8d277b7e67626c782ff2d94d0f0033
   specs:
     rails_util (0.1.0)
 
