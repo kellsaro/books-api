@@ -1,3 +1,8 @@
+PATH
+  remote: /Users/maykell/Projects/ruby/rails/rails_util
+  specs:
+    rails_util (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -277,6 +282,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.3)
+  rails_util!
   rspec-openapi
   rspec-rails
   shoulda-matchers (~> 4.5, >= 4.5.1)
